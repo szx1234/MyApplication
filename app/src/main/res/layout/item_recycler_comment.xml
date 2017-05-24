@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/articalcomment_img_user"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="szx584820"
+                android:textColor="@android:color/holo_blue_bright"
+                android:id="@+id/articalcomment_text_name"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="沙发 昨天 18:57"
+                android:id="@+id/articalcomment_text_replytime"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/articlecomment_img_reply"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@android:drawable/ic_menu_edit" />
+    </LinearLayout>
+
+    <com.szx.myapplication.webview.MyWebView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/articalcomment_webview_content">
+
+    </com.szx.myapplication.webview.MyWebView>
+</LinearLayout>
