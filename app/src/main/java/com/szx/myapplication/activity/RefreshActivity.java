@@ -68,7 +68,7 @@ public class RefreshActivity extends AppCompatActivity {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new PostAdapter(list, recyclerView);
+        adapter = new PostAdapter(list, recyclerView, this);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {

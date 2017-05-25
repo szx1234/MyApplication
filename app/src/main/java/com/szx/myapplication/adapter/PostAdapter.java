@@ -1,5 +1,7 @@
 package com.szx.myapplication.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
+import com.szx.myapplication.activity.ArticleActivity;
 import com.szx.myapplication.model.Post;
 
 import java.util.List;
@@ -26,6 +29,7 @@ public class PostAdapter extends RecyclerView.Adapter {
     private List<Post> mPostList;
     private OnLoadMoreListener onLoadMoreListener;
     public static boolean loadding = false;
+    Context context;
     //当还剩5个帖子时进行加载
     //private int visibleThreshold = 5;
 
@@ -54,8 +58,9 @@ public class PostAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public PostAdapter(List<Post> postList, RecyclerView recyclerView) {
+    public PostAdapter(List<Post> postList, RecyclerView recyclerView, Context context) {
 
+        this.context = context;
         mPostList = postList;
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -101,7 +106,10 @@ public class PostAdapter extends RecyclerView.Adapter {
             ((NormalHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(activity, "你点击了：" + post.getUrl(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, ArticleActivity.class);
+                    intent.putExtra("url", post.getUrl());
+                    context.startActivity(intent);
+
                     Toast.makeText(v.getContext(), "你点击了" + post.getUrl(), Toast.LENGTH_SHORT).show();
                 }
             });

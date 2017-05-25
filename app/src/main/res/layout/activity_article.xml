@@ -4,10 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/item_recycler_owner"/>
+
+    <TextView
+        android:id="@+id/article_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="热烈庆祝西安电子科技大学成立80周年"
+        android:textSize="17dp"
+        android:textColor="#000"
+        android:layout_margin="10dp" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/artical_recycler_view"
+        android:id="@+id/article_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
