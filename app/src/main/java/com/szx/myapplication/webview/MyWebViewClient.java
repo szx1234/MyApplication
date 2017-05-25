@@ -36,7 +36,6 @@ public class MyWebViewClient extends WebViewClient {
         //TODO 处理不同的链接点击事件
 
         if (url.startsWith("https://cnodejs.org/user/")) { // 用户主页协议
-          //  UserDetailActivity.open(context, url.substring(25));
         } else if (url.startsWith("https://cnodejs.org/topic/")) { // 话题主页协议
             //ArticleNormalActivity.open(context, url.substring(26));
         } else { // 其他连接
