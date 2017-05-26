@@ -1,6 +1,7 @@
 package com.szx.myapplication.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
+import com.szx.myapplication.activity.ArticleActivity;
+import com.szx.myapplication.activity.UserDetailActivity;
 import com.szx.myapplication.model.Article;
 import com.szx.myapplication.webview.MyWebView;
 
@@ -86,7 +89,11 @@ public class ArticleAdapter extends RecyclerView.Adapter{
         commentHolder.img_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "你点了" + article.getImgUrl(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "你点了" + article.getUserDetailUrl(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, UserDetailActivity.class);
+                intent.putExtra("url", article.getUserDetailUrl());
+                intent.putExtra("name", article.getUserName());
+                context.startActivity(intent);
             }
         });
         commentHolder.btn_reply.setOnClickListener(new View.OnClickListener() {

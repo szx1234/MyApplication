@@ -15,6 +15,17 @@ public class Article {
     private String btnUrl;
     //回复内容
     private String content;
+    //用户个人信息
+    private String userDetailUrl;
+
+    public String getUserDetailUrl() {
+        return userDetailUrl;
+    }
+
+    public void setUserDetailUrl(String userDetailUrl) {
+        this.userDetailUrl = userDetailUrl;
+    }
+
 
     public String getImgUrl() {
         return imgUrl;

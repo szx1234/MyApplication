@@ -133,6 +133,7 @@ public class ArticleActivity extends AppCompatActivity {
                     Log.w("想死", "onSuccess: " + element.html() );
                     Article article = new Article();
                     article.setImgUrl(element.select("span.avatar").select("img").attr("src"));
+                    article.setUserDetailUrl(element.select("ul.authi").select("li.grey").select("b").select("a").attr("href"));
                     article.setUserName(element.select("ul.authi").select("li.grey").select("b").text());
                     article.setReplyTime(element.select("ul.authi").select("li.grey.rela").text().replaceAll("收藏", ""));
                     article.setBtnUrl(element.select("div.replybtn").select("input").attr("href"));

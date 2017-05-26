@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.szx.myapplication.activity.UserDetailActivity"
     tools:showIn="@layout/activity_scrolling">
@@ -36,8 +37,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/userdetail_score"
                     android:paddingRight="10dp"
-                    android:text="262"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -59,10 +61,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_gold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="1907"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -84,10 +87,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_upload"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="20GB"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -109,10 +113,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_download"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="20GB"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -134,10 +139,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_public_seed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -160,10 +166,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="23"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -185,10 +192,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_protectedseed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="1764.00"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -210,6 +218,7 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/userdetail_people_quality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
