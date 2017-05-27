@@ -18,8 +18,8 @@ public class AsyncHttpUtil {
 
     static{
         client = new AsyncHttpClient();
-        cookieStore = new PersistentCookieStore(App.getAppContext());
-        client.setCookieStore(cookieStore);
+//        cookieStore = new PersistentCookieStore(App.getAppContext());
+//        client.setCookieStore(cookieStore);
     }
 
     public static void get(Context context, String url, AsyncHttpResponseHandler handler){
