@@ -1,6 +1,7 @@
 package com.szx.myapplication.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,16 +19,17 @@ public class AsyncHttpUtil {
 
     static{
         client = new AsyncHttpClient();
-//        cookieStore = new PersistentCookieStore(App.getAppContext());
-//        client.setCookieStore(cookieStore);
+        cookieStore = new PersistentCookieStore(App.getAppContext());
+        client.setCookieStore(cookieStore);
     }
 
     public static void get(Context context, String url, AsyncHttpResponseHandler handler){
-        client.get(context, url, handler);
+        Log.w("请求", "absUrl = " + UrlUtil.getAbsUrl(url));
+        client.get(context, UrlUtil.getAbsUrl(url), handler);
     }
 
     public static void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler handler){
-        client.post(context, url, params, handler);
+        client.post(context, UrlUtil.getAbsUrl(url), params, handler);
     }
 
     public static void clearCookieStore(){

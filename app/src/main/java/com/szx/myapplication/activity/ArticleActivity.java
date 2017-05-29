@@ -17,6 +17,7 @@ import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
 import com.szx.myapplication.adapter.ArticleAdapter;
 import com.szx.myapplication.model.Article;
+import com.szx.myapplication.util.AsyncHttpUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -69,8 +70,8 @@ public class ArticleActivity extends AppCompatActivity {
 
     private void addData() {
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(ArticleActivity.this, "http://bbs.rs.xidian.me/" + url, new AsyncHttpResponseHandler() {
+
+        AsyncHttpUtil.get(ArticleActivity.this, url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
@@ -84,10 +85,8 @@ public class ArticleActivity extends AppCompatActivity {
     }
 
     private void initHeader() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        PersistentCookieStore cookie = new PersistentCookieStore(this);
-        client.setCookieStore(cookie);
-        client.get(ArticleActivity.this, "http://bbs.rs.xidian.me/" + url, new AsyncHttpResponseHandler() {
+
+        AsyncHttpUtil.get(ArticleActivity.this, url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
                 Log.w("想尿尿", "" + new String(responseBody));

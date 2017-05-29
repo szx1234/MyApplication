@@ -1,148 +1,221 @@
 package com.szx.myapplication.activity;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
-import com.loopj.android.http.RequestParams;
+import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
-
+import com.szx.myapplication.adapter.PostAdapter;
+import com.szx.myapplication.model.Post;
+import com.szx.myapplication.util.AsyncHttpUtil;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import java.util.ArrayList;
 import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.cookie.Cookie;
 
-public class MainActivity extends AppCompatActivity {
-    String TAG = "hehe";
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+    private List<Post> list;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout refreshLayout;
+    private PostAdapter adapter;
+    Handler handler = new Handler();
+    int count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_activty);
 
-        ((Button)findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
+        list = new ArrayList<>();
+        recyclerView = (RecyclerView) findViewById(R.id.main_recycler);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                startActivity(intent);
-            }
-        });
-        final AsyncHttpClient client = new AsyncHttpClient();
-        PersistentCookieStore newCookie = new PersistentCookieStore(MainActivity.this);
-        client.setCookieStore(newCookie);
-
-//        client.get("http://bbs.rs.xidian.me/home.php?mod=space&uid=297362&do=profile&mycenter=1&mobile=2", new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
-//                Log.w("ooo", "responseBody" + new String(responseBody));
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        ((TextView)findViewById(R.id.textView)).setText(new String(responseBody));
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//
-//            }
-//        });
-
-        client.get("http://bbs.rs.xidian.me/member.php?mod=logging&action=login&mobile=2", new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
-
-                Log.w(TAG, "statusCode :" + statusCode);
-                for(int i = 0; i < headers.length; i++)
-                    Log.w(TAG, "header : " + headers[i]);
-
-                Log.w(TAG, "responseBody" + new String(responseBody));
-                runOnUiThread(new Runnable() {
+            public void onRefresh() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView)).setText(Html.fromHtml(new String(responseBody)));
-                    }
-                });
-
-               // Map<String, String> params = new HashMap<String, String>();
-                showCookie();
-                RequestParams params = new RequestParams();
-                params.put("username", "szx584820");
-                params.put("password", "szx584820");
-                client.post(MainActivity.this, "http://bbs.rs.xidian.me/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LRaJa&mobile=2", params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        Log.w("hehe", "statusCode :" + statusCode);
-
-                        showCookie();
-                        for(int i = 0; i < headers.length; i++)
-                            Log.w(TAG, "header : " + headers[i]);
-                        Log.w("hehe", "responseBody" + new String(responseBody));
-
-
-
-                        client.get("http://bbs.rs.xidian.me/forum.php?mod=guide&view=hot&mobile=2", new AsyncHttpResponseHandler() {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                Log.w("hehe", "statusCode :" + statusCode);
-                                for(int i = 0; i < headers.length; i++)
-                                    Log.w(TAG, "header : " + headers[i]);
-                                Log.w("hehe", "responseBody" + new String(responseBody));
-
-                                client.get("http://bbs.rs.xidian.me/home.php?mod=space&uid=297362&do=profile&mycenter=1&mobile=2", new AsyncHttpResponseHandler() {
-                                    @Override
-                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                        Log.w("ooo", "responseBody" + new String(responseBody));
-                                        showCookie();
-                                    }
-
-                                    @Override
-                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                            public void run() {
+                                refreshLayout.setRefreshing(false);
                             }
                         });
                     }
+                }, 2000);
+            }
+        });
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Log.w("hehe", "onFailure: " + new String(responseBody
-                        ));
-                    }
-                });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        addDate();
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new PostAdapter(list, recyclerView, this);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //处理加载更多逻辑
+                list.add(null);
+                adapter.notifyItemInserted(list.size() - 1);
+                addDate();
+            }
+        });
+
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_activty, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    private void addDate() {
+        AsyncHttpUtil.get(MainActivity.this, "forum.php?mod=forumdisplay&fid=110&mobile=2", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
+                Log.w("2222", new String(responseBody));
+
+                if (list.size() > 0) {
+                    list.remove(list.size() - 1);
+                    adapter.notifyDataSetChanged();
+                }
+                Document doc = Jsoup.parse(new String(responseBody));
+                Elements elements = doc.select("li");
+                for (Element element : elements) {
+                    Element a = element.select("a").get(0);
+                    String url = a.attr("href").replaceAll("amp;", "");
+                    String replyCount = element.select("span.num").text();
+                    boolean hasImg = element.select("span.icon_tu").select("img").attr("src").equals("") ? false : true;
+                    String author = element.select("a").select("span.by").text();
+                    String title = element.select("a").text();
+                    title = title.substring(0, title.length() - author.length());
+                    Log.w("element", "  ");
+                    Log.w("element", author);
+                    Log.w("element", title);
+                    Log.w("element", url);
+                    Log.w("element", replyCount);
+                    Log.w("element", hasImg + "");
+                    Post post = new Post(url, title, author, replyCount, hasImg);
+                    list.add(post);
+                }
+                adapter.notifyDataSetChanged();
+                PostAdapter.loadding = false;
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.w(TAG, "onFailure: " );
+                PostAdapter.loadding = false;
+                if (list.size() > 0) {
+                    list.remove(list.size() - 1);
+                    adapter.notifyDataSetChanged();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "加载失败！", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
-    }
 
-    private void showCookie(){
-        PersistentCookieStore mCookieStore = new PersistentCookieStore(getApplicationContext());
-        List<Cookie> cookies = mCookieStore.getCookies();
 
-        Log.e("cookies", "     " );
-        Log.e("cookies", "     " );
-        Log.e("cookies", "cookies.size() = " + cookies.size());
-
-        for (Cookie cookie : cookies) {
-            Log.e("cookies", cookie.getName() + " = " + cookie.getValue());
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.szx.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -14,10 +15,10 @@ import com.loopj.android.http.RequestParams;
 import com.szx.myapplication.R;
 import com.szx.myapplication.util.AsyncHttpUtil;
 import com.szx.myapplication.util.UrlUtil;
+import com.szx.myapplication.util.Util;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import cz.msebera.android.httpclient.Header;
@@ -60,8 +61,19 @@ public class LoginActivity extends AppCompatActivity {
                             if (mResponse.contains("欢迎您回来")) {
                                 Elements elemets = doc.select("ul.user_fun").select("li");
                                 String href = elemets.get(2).select("a").attr("href");
-                                Log.w("LoginActivity", "onSuccess: " + href);
+                                /**
+                                 * 解析UID
+                                 */
 
+                                String uid = Util.analysisUid(href);
+                                Log.w("wocao", "onSuccess: " + uid );
+                                if (!TextUtils.isEmpty(uid)) {
+                                    Util.setUid(uid);
+                                }
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
                             } else if (mResponse.contains("登录失败，您还可以尝试")) {
                                 String reason = doc.select("div.jump_c").select("p").get(0).text();
                                 Toast.makeText(LoginActivity.this, reason, Toast.LENGTH_SHORT).show();

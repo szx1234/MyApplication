@@ -39,7 +39,6 @@ public class MyWebViewClient extends WebViewClient {
         } else if (url.startsWith("https://cnodejs.org/topic/")) { // 话题主页协议
             //ArticleNormalActivity.open(context, url.substring(26));
         } else { // 其他连接
-            //todo
             Toast.makeText(context,"链接被电击",Toast.LENGTH_SHORT).show();
         }
         return true;

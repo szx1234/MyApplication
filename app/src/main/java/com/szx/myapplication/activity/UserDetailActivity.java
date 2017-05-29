@@ -1,6 +1,5 @@
 package com.szx.myapplication.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -10,21 +9,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
 import com.squareup.picasso.Picasso;
 import com.szx.myapplication.R;
-import com.szx.myapplication.model.UserDetail;
+import com.szx.myapplication.util.AsyncHttpUtil;
+import com.szx.myapplication.util.Util;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.text.DecimalFormat;
 
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -52,9 +50,10 @@ public class UserDetailActivity extends AppCompatActivity {
     String download;
     String publishSeedNum;
     String chipNum;
-    String protectSeddNum;
+    String protectSeedNum;
     String peopleQuality;
 
+    private final float GB = 1024*1024*1024;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +63,11 @@ public class UserDetailActivity extends AppCompatActivity {
 
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsiing_toolbar_layout);
         mCollapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
-        mCollapsingToolbarLayout.setExpandedTitleMarginBottom(-0);
+        mCollapsingToolbarLayout.setExpandedTitleMarginBottom(-200);
 
-        url = "http://bbs.rs.xidian.me/" + getIntent().getStringExtra("url");
+        url = getIntent().getStringExtra("url");
         mTitle = getIntent().getStringExtra("name");
+
         mCollapsingToolbarLayout.setTitle(mTitle);
 
         initData();
@@ -81,56 +81,56 @@ public class UserDetailActivity extends AppCompatActivity {
         });
 
 
-        (new GetUserDetailTask()).execute();
-//        AsyncHttpClient client = new AsyncHttpClient();
-//        PersistentCookieStore cookieStore = new PersistentCookieStore(UserDetailActivity.this);
-//        client.setCookieStore(cookieStore);
-//        client.get(UserDetailActivity.this, url, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                Document doc = Jsoup.parse(new String(responseBody));
-//                imgUrl = doc.select("div.avatar_m").select("img").attr("src");
-//                Elements elements = doc.select("div.user_box").select("li");
-//
-//                Log.w("数量", new String(responseBody) );
-//                Log.w("数量", "onSuccess: " + elements.size()+ "");
-//                score = elements.get(0).select("span").text();
-//                gold = elements.get(1).select("span").text();
-//                upload = elements.get(2).select("span").text();
-//                download = elements.get(3).select("span").text();
-//                publishSeedNum = elements.get(4).select("span").text();
-//                chipNum = elements.get(5).select("span").text();
-//                protectSeddNum = elements.get(6).select("span").text();
-//                peopleQuality = elements.get(7).select("span").text();
-//
-//
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Picasso.with(UserDetailActivity.this).load(imgUrl).into(mImg);
-//                        Log.w("数量", "run: " + imgUrl);
-//                        mScore.setText(score);
-//                        mGold.setText(gold);
-//                        mUpload.setText(upload);
-//                        mDownload.setText(download);
-//                        mPublishSeedNum.setText(publishSeedNum);
-//                        mChipNum.setText(chipNum);
-//                        mPublishSeedNum.setText(publishSeedNum);
-//                        mProtectSeddNum.setText(protectSeddNum);
-//                        mPeopleQuality.setText(peopleQuality);
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                Toast.makeText(UserDetailActivity.this, "获取个人信息失败！", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        //url是用户个人信息网址
+        url = "home.php?mod=space&uid=" + Util.analysisUid(url) + "&do=profile&mobile=2";
+        AsyncHttpUtil.get(UserDetailActivity.this, url, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Document doc = Jsoup.parse(new String(responseBody));
+                imgUrl = doc.select("div.avatar_m").select("img").attr("src");
+                Elements elements = doc.select("div.user_box").select("li");
+
+                Log.w("数量", new String(responseBody));
+                Log.w("数量", "onSuccess: " + elements.size() + "");
+                score = elements.get(0).select("span").text();
+                gold = elements.get(1).select("span").text();
+
+                upload = new DecimalFormat("###,###,###.##").format(Float.valueOf(elements.get(2).select("span").text())/GB) + "GB";
+                download = new DecimalFormat("###,###,###.##").format(Float.valueOf(elements.get(3).select("span").text())/GB) + "GB";
+
+                publishSeedNum = elements.get(4).select("span").text();
+                chipNum = elements.get(5).select("span").text();
+                protectSeedNum = elements.get(6).select("span").text();
+                peopleQuality = elements.get(7).select("span").text();
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Picasso.with(UserDetailActivity.this).load(imgUrl).into(mImg);
+                        Log.w("数量", "run: " + imgUrl);
+                        mScore.setText(score);
+                        mGold.setText(gold);
+                        mUpload.setText(upload);
+                        mDownload.setText(download);
+                        mPublishSeedNum.setText(publishSeedNum);
+                        mChipNum.setText(chipNum);
+                        mPublishSeedNum.setText(publishSeedNum);
+                        mProtectSeddNum.setText(protectSeedNum);
+                        mPeopleQuality.setText(peopleQuality);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(UserDetailActivity.this, "获取个人信息失败！", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    //初始化控件
     private void initData() {
-        // url = getIntent().getStringExtra("url");
         mImg = (CircleImageView) findViewById(R.id.userdetail_user_img);
         mScore = (TextView) findViewById(R.id.userdetail_score);
         mGold = (TextView) findViewById(R.id.userdetail_gold);
@@ -142,63 +142,4 @@ public class UserDetailActivity extends AppCompatActivity {
         mPeopleQuality = (TextView) findViewById(R.id.userdetail_people_quality);
     }
 
-
-    class GetUserDetailTask extends AsyncTask<Void, Void, Void> {
-        String imgUrl;
-        String score;
-        String gold;
-        String upload;
-        String download;
-        String publishSeedNum;
-        String chipNum;
-        String protectSeddNum;
-        String peopleQuality;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            Log.w("doInBack", "进入");
-            AsyncHttpClient client = new AsyncHttpClient();
-            PersistentCookieStore cookieStore = new PersistentCookieStore(UserDetailActivity.this);
-            client.setCookieStore(cookieStore);
-            client.get(UserDetailActivity.this, url, new AsyncHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    Document doc = Jsoup.parse(new String(responseBody));
-                    imgUrl = doc.select("div.avatar").select("img").attr("src");
-                    Elements elements = doc.select("div.user_box").select("li");
-                    score = elements.get(0).select("span").text();
-                    gold = elements.get(1).select("span").text();
-                    upload = elements.get(3).select("span").text();
-                    download = elements.get(4).select("span").text();
-                    publishSeedNum = elements.get(5).select("span").text();
-                    chipNum = elements.get(6).select("span").text();
-                    protectSeddNum = elements.get(7).select("span").text();
-                    peopleQuality = elements.get(8).select("span").text();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Toast.makeText(UserDetailActivity.this, "获取个人信息失败！", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Log.w("doInBack", "onPostExecute: ");
-            Picasso.with(UserDetailActivity.this).load(imgUrl).into(mImg);
-            mScore.setText(score);
-            mGold.setText(gold);
-            mUpload.setText(upload);
-            mDownload.setText(download);
-            mPublishSeedNum.setText(publishSeedNum);
-            mChipNum.setText(chipNum);
-            mPublishSeedNum.setText(publishSeedNum);
-            mProtectSeddNum.setText(protectSeddNum);
-            mPeopleQuality.setText(peopleQuality);
-        }
-    }
 }
