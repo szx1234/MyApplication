@@ -7,4 +7,5 @@ package com.szx.myapplication.util;
 
 public class Const {
     public static final String KEY_UID = "UID";
+    public static final String KEY_USER_NAME = "USER_NAME";
 }

@@ -17,21 +17,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
 import com.szx.myapplication.adapter.PostAdapter;
 import com.szx.myapplication.model.Post;
 import com.szx.myapplication.util.AsyncHttpUtil;
+import com.szx.myapplication.util.UrlUtil;
+import com.szx.myapplication.util.Util;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,6 +48,9 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
     private PostAdapter adapter;
+    private CircleImageView circleImageView;
+    private TextView userName;
+    NavigationView navigationView;
     Handler handler = new Handler();
     int count = 0;
 
@@ -85,7 +97,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
+        
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View view = navigationView.getHeaderView(0);
+        userName = (TextView) view.findViewById(R.id.nav_user_name);
+        userName.setText(Util.getUserName());
+        circleImageView = (CircleImageView) view.findViewById(R.id.nav_user_icon);
+        Picasso.with(this).load(UrlUtil.getAbsUrl("ucenter/avatar.php?uid=" + Util.getUid() + "&size=small")).into(circleImageView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,7 +123,6 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -132,23 +149,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        switch(id){
-            case R.id.nav_myArticle:
-                break;
-            case R.id.nav_myFriend:
-                break;
-            case R.id.nav_myCollection:
-                break;
-            case R.id.nav_scanHistory:
-                break;
-            case R.id.nav_message:
-                break;
-            case  R.id.nav_settings:
-                break;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -158,11 +158,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Toast.makeText(this, item.getItemId(), Toast.LENGTH_SHORT).show();
         String str = "NULL";
         /**
          * TODO 添加nav各项逻辑
          */
-        switch(id){
+        switch (id) {
             case R.id.nav_myArticle:
                 str = "文章";
                 break;

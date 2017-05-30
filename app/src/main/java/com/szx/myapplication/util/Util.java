@@ -26,6 +26,18 @@ public class Util {
         return uid;
     }
 
+    public static void setUserName(String userName){
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getAppContext()).edit();
+        editor.putString(Const.KEY_USER_NAME, userName);
+        editor.commit();
+    }
+
+    public static String getUserName(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
+        String userName = sharedPreferences.getString(Const.KEY_USER_NAME, "");
+        return userName;
+    }
+
     public static String analysisUid(String href){
         String uid = null;
         Pattern pattern = Pattern.compile("uid=\\d+");

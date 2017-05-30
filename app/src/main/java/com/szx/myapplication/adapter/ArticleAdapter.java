@@ -29,6 +29,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by songzhixin on 2017/5/24.
  */
@@ -85,6 +87,7 @@ public class ArticleAdapter extends RecyclerView.Adapter{
 
         commentHolder.text_user_name.setText(article.getUserName());
         commentHolder.text_reply_time.setText(article.getReplyTime());
+        Log.w("mama", "onBindViewHolder: " + article.getImgUrl() );
         commentHolder.webView_content.loadDataWithBaseURL(null, article.getContent(), "text/html", "UTF-8", null);
         commentHolder.img_user.setOnClickListener(new View.OnClickListener() {
             @Override

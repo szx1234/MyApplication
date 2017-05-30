@@ -16,6 +16,7 @@ public class UrlUtil {
     public static String getAbsUrl(String url){
         if(url.contains("http://"))
             return url;
-        else return BASE_URL + url;
+        else
+            return BASE_URL + url;
     }
 }

@@ -46,7 +46,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 mUserName = mEt_Username.getText().toString();
                 mPassword = mEt_Password.getText().toString();
-                if (!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPassword)) {
+//                if (!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPassword)) {
+                if(true){
                     RequestParams params = new RequestParams();
                     params.put("username", mUserName);
                     params.put("password", mPassword);
@@ -61,15 +62,18 @@ public class LoginActivity extends AppCompatActivity {
                             if (mResponse.contains("欢迎您回来")) {
                                 Elements elemets = doc.select("ul.user_fun").select("li");
                                 String href = elemets.get(2).select("a").attr("href");
+
                                 /**
                                  * 解析UID
                                  */
-
                                 String uid = Util.analysisUid(href);
                                 Log.w("wocao", "onSuccess: " + uid );
                                 if (!TextUtils.isEmpty(uid)) {
                                     Util.setUid(uid);
                                 }
+
+                                String userName = doc.select("div.footer").select("a").get(0).text();
+                                Util.setUserName(userName);
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
