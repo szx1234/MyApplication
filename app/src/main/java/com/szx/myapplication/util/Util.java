@@ -26,19 +26,31 @@ public class Util {
         return uid;
     }
 
-    public static void setUserName(String userName){
+    public static void setUserName(String userName) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getAppContext()).edit();
         editor.putString(Const.KEY_USER_NAME, userName);
         editor.commit();
     }
 
-    public static String getUserName(){
+    public static String getUserName() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
         String userName = sharedPreferences.getString(Const.KEY_USER_NAME, "");
         return userName;
     }
 
-    public static String analysisUid(String href){
+    public static void setLastForumFid(String fid) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getAppContext()).edit();
+        editor.putString(Const.KEY_LAST_FORUM_FID, fid);
+        editor.commit();
+    }
+
+    public static String getLastForumFid() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
+        String fid = sharedPreferences.getString(Const.KEY_LAST_FORUM_FID, "110");
+        return fid;
+    }
+
+    public static String analysisUid(String href) {
         String uid = null;
         Pattern pattern = Pattern.compile("uid=\\d+");
         Matcher matcher = pattern.matcher(href);
@@ -47,4 +59,16 @@ public class Util {
         }
         return uid;
     }
+
+    public static String analysisPageNum(String str) {
+        String page = null;
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            page = matcher.group();
+        }
+        return page;
+    }
+
+
 }

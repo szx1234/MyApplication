@@ -28,6 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.MActivity"/>
     </application>
 
 </manifest>

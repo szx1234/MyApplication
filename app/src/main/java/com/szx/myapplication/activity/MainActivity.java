@@ -1,5 +1,6 @@
 package com.szx.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -34,7 +35,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,61 +50,40 @@ public class MainActivity extends AppCompatActivity
     private PostAdapter adapter;
     private CircleImageView circleImageView;
     private TextView userName;
-    NavigationView navigationView;
-    Handler handler = new Handler();
-    int count = 0;
+    private NavigationView navigationView;
+    private Handler handler = new Handler();
+
+    private int currentPage = 1;
+    private int maxPage = 1;
+    private String fid = "108";
+    private boolean isFirstInThisForum = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activty);
 
-        list = new ArrayList<>();
-        recyclerView = (RecyclerView) findViewById(R.id.main_recycler);
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshLayout.setRefreshing(false);
-                            }
-                        });
-                    }
-                }, 2000);
-            }
-        });
+        fid = Util.getLastForumFid();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        addDate();
+        initMaxPageAndFid();
+        /**
+         * 初始化RecyclerView和数据
+         */
+        initRecyclerAndData();
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new PostAdapter(list, recyclerView, this);
-        recyclerView.setAdapter(adapter);
+        /**
+         * 初始化用户信息
+         */
+        initUserDetail();
 
-        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //处理加载更多逻辑
-                list.add(null);
-                adapter.notifyItemInserted(list.size() - 1);
-                addDate();
-            }
-        });
+        initToolBarAndDrawerLayout();
+    }
 
-        
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View view = navigationView.getHeaderView(0);
-        userName = (TextView) view.findViewById(R.id.nav_user_name);
-        userName.setText(Util.getUserName());
-        circleImageView = (CircleImageView) view.findViewById(R.id.nav_user_icon);
-        Picasso.with(this).load(UrlUtil.getAbsUrl("ucenter/avatar.php?uid=" + Util.getUid() + "&size=small")).into(circleImageView);
+    private void initMaxPageAndFid() {
 
+    }
+
+    private void initToolBarAndDrawerLayout() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -124,6 +103,53 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void initRecyclerAndData() {
+        list = new ArrayList<>();
+        recyclerView = (RecyclerView) findViewById(R.id.main_recycler);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                currentPage = 1;
+                list.clear();
+                adapter.notifyDataSetChanged();
+                loadMore();
+            }
+        });
+        //加载第一次数据
+        loadMore();
+
+        //给recycler设置一些东西，比如Linearlayoutmanager和adapter
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new PostAdapter(list, recyclerView, this);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //处理加载更多逻辑
+                if (currentPage <= maxPage) {
+                    if (list.size() > 0) {
+                        list.add(null);
+                        adapter.notifyItemInserted(list.size() - 1);
+                    }
+                    loadMore();
+                }
+            }
+        });
+    }
+
+    private void initUserDetail() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View view = navigationView.getHeaderView(0);
+        userName = (TextView) view.findViewById(R.id.nav_user_name);
+        userName.setText(Util.getUserName());
+        circleImageView = (CircleImageView) view.findViewById(R.id.nav_user_icon);
+        Picasso.with(this).load(UrlUtil.getAbsUrl("ucenter/avatar.php?uid=" + Util.getUid() + "&size=small")).into(circleImageView);
     }
 
     @Override
@@ -200,17 +226,22 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void addDate() {
-        AsyncHttpUtil.get(MainActivity.this, "forum.php?mod=forumdisplay&fid=110&mobile=2", new AsyncHttpResponseHandler() {
+    private void loadMore() {
+        AsyncHttpUtil.get(MainActivity.this, "forum.php?mod=forumdisplay&fid=" + fid + "&page=" + currentPage++ + "&mobile=2", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
-                Log.w("2222", new String(responseBody));
+                Log.w("2222", new String(responseBody).replaceAll("amp;", ""));
 
                 if (list.size() > 0) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
                 Document doc = Jsoup.parse(new String(responseBody));
+                Log.w("shit", "onSuccess: " + new String(responseBody));
+                if (isFirstInThisForum) {
+                    isFirstInThisForum = false;
+                    maxPage = Integer.valueOf(Util.analysisPageNum(doc.select("span[title]").text()));
+                }
                 Elements elements = doc.select("li");
                 for (Element element : elements) {
                     Element a = element.select("a").get(0);
@@ -231,11 +262,16 @@ public class MainActivity extends AppCompatActivity
                 }
                 adapter.notifyDataSetChanged();
                 PostAdapter.loadding = false;
+                if (refreshLayout.isRefreshing())
+                    refreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 PostAdapter.loadding = false;
+                if (refreshLayout.isRefreshing())
+                    refreshLayout.setRefreshing(false);
+
                 if (list.size() > 0) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
