@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -64,18 +65,21 @@ public class ArticleActivity extends AppCompatActivity {
                     ArticleAdapter.loadding = true;
                     data.add(null);
                     adapter.notifyItemInserted(data.size() - 1);
-                    onLoadMore();
+                    loadMore();
                 }
             }
         });
         mRecyclerView.setAdapter(adapter);
-        onLoadMore();
+        loadMore();
     }
 
-    private void onLoadMore() {
+
+    private void loadMore() {
+
         AsyncHttpUtil.get(ArticleActivity.this, "forum.php?mod=viewthread&tid=" + tid + "&extra=&page=" + currentPage++ + "&mobile=2", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
+
                 /**
                  * 去掉Footer
                  */
@@ -83,10 +87,6 @@ public class ArticleActivity extends AppCompatActivity {
                     data.remove(data.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
-
-                /**
-                 * 获取maxPage
-                 */
                 Document doc = Jsoup.parse(new String(responseBody));
                 if (isFirstInThisArticle) {
                     isFirstInThisArticle = false;
@@ -121,11 +121,7 @@ public class ArticleActivity extends AppCompatActivity {
                 }
 
                 Elements elements = doc.select("div.postlist");
-
-                /**
-                 * 添加标题
-                 */
-                if (currentPage == 2) { //之前currentPage++过所以是2
+                if (currentPage == 2) { //因为之前http请求时调用了currentPage++
                     final Elements titles = elements.select("h2");
                     if (titles.size() > 0)
                         runOnUiThread(new Runnable() {
@@ -146,14 +142,13 @@ public class ArticleActivity extends AppCompatActivity {
                     article.setContent(element.select("div.message").html());
                     data.add(article);
                 }
-
                 adapter.notifyDataSetChanged();
 
                 /**
-                 * 解决莫名的多一个问题
+                 * 删除莫名多一个的情况
                  */
                 if(data.size() > 0){
-                    data.remove(data.size()-1);
+                    data.remove(data.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
                 ArticleAdapter.loadding = false;
