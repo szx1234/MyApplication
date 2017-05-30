@@ -60,6 +60,16 @@ public class Util {
         return uid;
     }
 
+    public static String analysisTid(String href) {
+        String tid = null;
+        Pattern pattern = Pattern.compile("tid=\\d+");
+        Matcher matcher = pattern.matcher(href);
+        if (matcher.find()) {
+            tid = matcher.group().replaceAll("tid=", "");
+        }
+        return tid;
+    }
+
     public static String analysisPageNum(String str) {
         String page = null;
         Pattern pattern = Pattern.compile("\\d+");

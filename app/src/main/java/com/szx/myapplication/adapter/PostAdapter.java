@@ -2,7 +2,6 @@ package com.szx.myapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import java.util.List;
  */
 
 public class PostAdapter extends RecyclerView.Adapter {
-    private static final int TYPE__FOOTER = 0;
+    private static final int TYPE_FOOTER = 0;
     private static final int TYPE_NORMOL = 1;
     private List<Post> mPostList;
     private OnLoadMoreListener onLoadMoreListener;
@@ -39,6 +38,7 @@ public class PostAdapter extends RecyclerView.Adapter {
         TextView replyCount;
         TextView hasImg;
         View view;
+
         public NormalHolder(View view) {
             super(view);
             this.view = view;
@@ -69,9 +69,8 @@ public class PostAdapter extends RecyclerView.Adapter {
                 super.onScrolled(recyclerView, dx, dy);
                 int lastVisibleItemPositon = linearLayoutManager.findLastVisibleItemPosition();
                 int totalItem = linearLayoutManager.getItemCount();
-                if (!loadding && totalItem == lastVisibleItemPositon+1) {
+                if (!loadding && totalItem == lastVisibleItemPositon + 1) {
                     if (onLoadMoreListener != null) {
-                        loadding = true;
                         onLoadMoreListener.onLoadMore();
                     }
                 }
@@ -130,6 +129,6 @@ public class PostAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mPostList.get(position) != null ? TYPE_NORMOL : TYPE__FOOTER;
+        return mPostList.get(position) != null ? TYPE_NORMOL : TYPE_FOOTER;
     }
 }

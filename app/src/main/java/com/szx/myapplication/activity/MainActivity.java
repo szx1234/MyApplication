@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity
 
         fid = Util.getLastForumFid();
 
-        initMaxPageAndFid();
         /**
          * 初始化RecyclerView和数据
          */
@@ -76,12 +75,13 @@ public class MainActivity extends AppCompatActivity
          */
         initUserDetail();
 
+        /**
+         * 初始化Toolbar等控件
+         */
         initToolBarAndDrawerLayout();
     }
 
-    private void initMaxPageAndFid() {
 
-    }
 
     private void initToolBarAndDrawerLayout() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity
                 //处理加载更多逻辑
                 if (currentPage <= maxPage) {
                     if (list.size() > 0) {
+                        PostAdapter.loadding = true;
                         list.add(null);
                         adapter.notifyItemInserted(list.size() - 1);
                     }
@@ -232,7 +233,7 @@ public class MainActivity extends AppCompatActivity
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
                 Log.w("2222", new String(responseBody).replaceAll("amp;", ""));
 
-                if (list.size() > 0) {
+                if (list.size() > 0 && list.get(list.size()-1) == null) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
@@ -272,10 +273,11 @@ public class MainActivity extends AppCompatActivity
                 if (refreshLayout.isRefreshing())
                     refreshLayout.setRefreshing(false);
 
-                if (list.size() > 0) {
+                if (list.size() > 0 && list.get(list.size()-1) == null) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
+                PostAdapter.loadding = false;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
