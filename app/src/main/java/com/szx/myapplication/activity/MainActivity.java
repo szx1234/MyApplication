@@ -134,8 +134,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.nav_myArticle:
+                break;
+            case R.id.nav_myFriend:
+                break;
+            case R.id.nav_myCollection:
+                break;
+            case R.id.nav_scanHistory:
+                break;
+            case R.id.nav_message:
+                break;
+            case  R.id.nav_settings:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -147,19 +158,40 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        String str = "NULL";
+        /**
+         * TODO 添加nav各项逻辑
+         */
+        switch(id){
+            case R.id.nav_myArticle:
+                str = "文章";
+                break;
+            case R.id.nav_myFriend:
+                str = "朋友";
+                break;
+            case R.id.nav_myCollection:
+                str = "收藏";
+                break;
+            case R.id.nav_scanHistory:
+                str = "历史";
+                break;
+            case R.id.nav_message:
+                str = "消息";
+                break;
+            case R.id.nav_settings:
+                str = "设置";
+                break;
+            case R.id.nav_about:
+                str = "关于";
+                break;
+            case R.id.nav_search:
+                str = "搜索";
+                break;
+            default:
+                str = "未知";
+                break;
         }
+        Toast.makeText(this, "你点击了 ： " + str, Toast.LENGTH_SHORT).show();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
