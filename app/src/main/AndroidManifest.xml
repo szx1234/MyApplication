@@ -21,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ArticleActivity" />
+        <activity android:name=".activity.ArticleActivity"
+            android:label="帖子正文"/>
         <activity
             android:name=".activity.UserDetailActivity"
             android:label="@string/title_activity_scrolling"
