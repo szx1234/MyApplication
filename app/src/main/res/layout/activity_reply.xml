@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/reply_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/AppTheme.PopupOverlay"></android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include layout="@layout/item_recycler_comment" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/reply_input"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="?attr/actionBarSize"
+        android:hint="在此回复内容"/>
+        <ImageButton
+            android:id="@+id/reply_btn_reply"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/reply_send"/>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

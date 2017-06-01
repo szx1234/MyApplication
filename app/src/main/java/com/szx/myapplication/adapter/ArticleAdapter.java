@@ -3,6 +3,7 @@ package com.szx.myapplication.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -24,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
 import com.szx.myapplication.activity.ArticleActivity;
+import com.szx.myapplication.activity.ReplyActivity;
 import com.szx.myapplication.activity.UserDetailActivity;
 import com.szx.myapplication.model.Article;
 import com.szx.myapplication.util.Util;
@@ -117,6 +119,12 @@ public class ArticleAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CommentHolder) {
+            /**
+             * 第一层没有回复按钮
+             */
+            if(position == 0)
+                ((CommentHolder) holder).btn_reply.setVisibility(View.INVISIBLE);
+
             CommentHolder commentHolder = (CommentHolder) holder;
             final Article article = data.get(position);
             Log.w("picasso", "onBindViewHolder: " + article.getImgUrl());
@@ -141,6 +149,9 @@ public class ArticleAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "你点击了" + article.getBtnUrl() + "heihei", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, ReplyActivity.class);
+                    intent.putExtra("article", article);
+                    context.startActivity(intent);
                 }
             });
         } else {

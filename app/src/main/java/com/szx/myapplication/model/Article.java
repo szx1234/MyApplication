@@ -1,10 +1,12 @@
 package com.szx.myapplication.model;
 
+import java.io.Serializable;
+
 /**
  * Created by songzhixin on 2017/5/24.
  */
 
-public class Article {
+public class Article implements Serializable{
     //图片url
     private String imgUrl;
     //用户名称
