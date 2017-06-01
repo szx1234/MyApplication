@@ -27,6 +27,7 @@ import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
 import com.szx.myapplication.adapter.PostAdapter;
 import com.szx.myapplication.model.Post;
+import com.szx.myapplication.model.UserDetail;
 import com.szx.myapplication.util.AsyncHttpUtil;
 import com.szx.myapplication.util.UrlUtil;
 import com.szx.myapplication.util.Util;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity
     private TextView userName;
     private NavigationView navigationView;
     private Handler handler = new Handler();
-
+    private DrawerLayout mDrawerLayout;
     private int currentPage = 1;
     private int maxPage = 1;
     private String fid = "108";
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main_activty);
 
         fid = Util.getLastForumFid();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         /**
          * 初始化RecyclerView和数据
@@ -151,13 +153,30 @@ public class MainActivity extends AppCompatActivity
         userName.setText(Util.getUserName());
         circleImageView = (CircleImageView) view.findViewById(R.id.nav_user_icon);
         Picasso.with(this).load(UrlUtil.getAbsUrl("ucenter/avatar.php?uid=" + Util.getUid() + "&size=small")).into(circleImageView);
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
+                intent.putExtra("uid", Util.getUid());
+                intent.putExtra("name", Util.getUserName());
+                startActivity(intent);
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDrawerLayout.closeDrawer(GravityCompat.START);
+                        }
+                    }, 100);
+                }
+
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }

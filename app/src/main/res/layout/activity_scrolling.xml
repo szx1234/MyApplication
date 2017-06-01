@@ -53,7 +53,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        android:src="@android:drawable/ic_delete" />
+        android:src="@mipmap/fab_add" />
 
     <include layout="@layout/content_scrolling" />
 

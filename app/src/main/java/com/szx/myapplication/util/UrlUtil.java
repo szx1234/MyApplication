@@ -19,4 +19,8 @@ public class UrlUtil {
         else
             return BASE_URL + url;
     }
+
+    public static String getUserDetailUrl(String uid){
+        return BASE_URL + "home.php?mod=space&uid=" + uid + "&do=profile&mobile=2";
+    }
 }

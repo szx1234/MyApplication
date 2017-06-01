@@ -26,6 +26,7 @@ import com.szx.myapplication.R;
 import com.szx.myapplication.activity.ArticleActivity;
 import com.szx.myapplication.activity.UserDetailActivity;
 import com.szx.myapplication.model.Article;
+import com.szx.myapplication.util.Util;
 import com.szx.myapplication.webview.MyWebView;
 
 import java.util.List;
@@ -131,7 +132,7 @@ public class ArticleAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Toast.makeText(context, "你点了" + article.getUserDetailUrl(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, UserDetailActivity.class);
-                    intent.putExtra("url", article.getUserDetailUrl());
+                    intent.putExtra("uid", Util.analysisUid(article.getUserDetailUrl()));
                     intent.putExtra("name", article.getUserName());
                     context.startActivity(intent);
                 }

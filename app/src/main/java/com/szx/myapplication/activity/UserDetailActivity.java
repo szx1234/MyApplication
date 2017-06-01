@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +19,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.szx.myapplication.R;
 import com.szx.myapplication.util.AsyncHttpUtil;
+import com.szx.myapplication.util.UrlUtil;
 import com.szx.myapplication.util.Util;
 
 import org.jsoup.Jsoup;
@@ -31,7 +35,6 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private String mTitle;
-    private String url = "http://rs.xidian.edu.cn/home.php?mod=space&uid=299032&do=profile&mobile=2";
     private CircleImageView mImg;
     private TextView mScore;
     private TextView mGold;
@@ -41,7 +44,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private TextView mChipNum;
     private TextView mProtectSeddNum;
     private TextView mPeopleQuality;
-
+    private FloatingActionButton mFab;
 
     String imgUrl;
     String score;
@@ -53,6 +56,9 @@ public class UserDetailActivity extends AppCompatActivity {
     String protectSeedNum;
     String peopleQuality;
 
+
+    private boolean isMyUid = false;
+    private String uid;
     private final float GB = 1024*1024*1024;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +67,41 @@ public class UserDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.mipmap.menu_return);
+
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsiing_toolbar_layout);
         mCollapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         mCollapsingToolbarLayout.setExpandedTitleMarginBottom(-200);
 
-        url = getIntent().getStringExtra("url");
+        uid = getIntent().getStringExtra("uid");
         mTitle = getIntent().getStringExtra("name");
 
         mCollapsingToolbarLayout.setTitle(mTitle);
 
         initData();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "你点击了注销", Snackbar.LENGTH_LONG)
+                /**
+                 * 聊天与注销
+                 */
+
+                String str = "";
+                if (isMyUid)
+                    str = "你点击了注销";
+                else
+                    str = "你点击了聊天";
+                Snackbar.make(view, str, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
+        isMyUid = Util.getUid().equals(uid);
 
-        //url是用户个人信息网址
-        url = "home.php?mod=space&uid=" + Util.analysisUid(url) + "&do=profile&mobile=2";
-        AsyncHttpUtil.get(UserDetailActivity.this, url, new AsyncHttpResponseHandler() {
+        AsyncHttpUtil.get(UserDetailActivity.this, UrlUtil.getUserDetailUrl(uid), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Document doc = Jsoup.parse(new String(responseBody));
@@ -127,6 +145,39 @@ public class UserDetailActivity extends AppCompatActivity {
                 Toast.makeText(UserDetailActivity.this, "获取个人信息失败！", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        /**
+         * 区别是自己或者是别人的情况
+         */
+        getMenuInflater().inflate(R.menu.menu_userdetail_activity, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_addfriend);
+        if(isMyUid) {
+            menuItem.setVisible(false);
+            mFab.setImageResource(R.mipmap.fab_delete );
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.menu_addfriend:
+                /**
+                 * TODO 添加好友
+                 */
+                Toast.makeText(this, "添加好友", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     //初始化控件
