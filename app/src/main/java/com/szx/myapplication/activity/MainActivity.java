@@ -64,7 +64,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activty);
 
-        fid = Util.getLastForumFid();
+        /**
+         * 刚开始的时候加载当前fid，如果是第一次加载那么就是上一次的fid
+         */
+        fid = App.getmCurrentFid();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         /**

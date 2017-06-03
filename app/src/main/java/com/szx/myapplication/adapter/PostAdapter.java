@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
+import com.szx.myapplication.activity.App;
 import com.szx.myapplication.activity.ArticleActivity;
 import com.szx.myapplication.model.Post;
+import com.szx.myapplication.util.Util;
 
 import java.util.List;
 
@@ -107,6 +109,11 @@ public class PostAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ArticleActivity.class);
                     intent.putExtra("url", post.getUrl());
+                    /**
+                     * 在点击某一个帖子的时候设置全局变量tid
+                     *
+                     */
+                    App.setmCurrentTid(Util.analysisTid(post.getUrl()));
                     context.startActivity(intent);
 
                     Toast.makeText(v.getContext(), "你点击了" + post.getUrl(), Toast.LENGTH_SHORT).show();

@@ -150,6 +150,7 @@ public class ArticleAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Toast.makeText(context, "你点击了" + article.getBtnUrl() + "heihei", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, ReplyActivity.class);
+                    intent.putExtra("url", article.getBtnUrl());
                     intent.putExtra("article", article);
                     context.startActivity(intent);
                 }

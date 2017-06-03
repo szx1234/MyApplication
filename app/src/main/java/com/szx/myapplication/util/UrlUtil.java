@@ -1,5 +1,7 @@
 package com.szx.myapplication.util;
 
+import com.szx.myapplication.activity.App;
+
 /**
  * Created by songzhixin on 2017/5/27.
  */
@@ -23,4 +25,9 @@ public class UrlUtil {
     public static String getUserDetailUrl(String uid){
         return BASE_URL + "home.php?mod=space&uid=" + uid + "&do=profile&mobile=2";
     }
+
+    public static String getReplyUrl(){
+        return "forum.php?mod=post&action=reply&fid="+ App.getmCurrentFid() + "&tid="+ App.getmCurrentTid()+"&extra=&replysubmit=yes&mobile=2";
+    }
+
 }

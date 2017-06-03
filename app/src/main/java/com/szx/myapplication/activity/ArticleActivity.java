@@ -60,7 +60,7 @@ public class ArticleActivity extends AppCompatActivity {
         text_title = (TextView) findViewById(R.id.article_text_title);
         url = getIntent().getStringExtra("url");
 
-        tid = Util.analysisTid(url);
+        tid = App.getmCurrentTid();
         data = new ArrayList<Article>();
         mRecyclerView = (RecyclerView) findViewById(R.id.article_recycler_view);
 
