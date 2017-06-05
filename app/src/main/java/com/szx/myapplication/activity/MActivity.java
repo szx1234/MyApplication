@@ -9,17 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.szx.myapplication.R;
+import com.szx.myapplication.Test;
+import com.szx.myapplication.view.MyDialog;
 
 /**
  * Created by songzhixin on 2017/5/30.
  */
 
 public class MActivity extends AppCompatActivity {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((TextView)findViewById(R.id.textView)).setText(getIntent().getStringExtra("str"));
+//        ((TextView)findViewById(R.id.textView)).setText(getIntent().getStringExtra("str"));
+        new MyDialog(this).show();
     }
 
     public static void open(Context context, String str){

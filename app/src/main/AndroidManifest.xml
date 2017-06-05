@@ -29,8 +29,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.MActivity"/>
+        <!--<activity android:name=".activity.MActivity"/>-->
         <activity android:name=".activity.ReplyActivity"/>
     </application>
 
 </manifest>
+
+<!--            android:name=".activity.LoginActivity"
+-->

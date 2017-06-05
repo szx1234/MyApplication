@@ -11,15 +11,14 @@ import com.szx.myapplication.util.Util;
 
 public class App extends Application {
     static Context mContext;
-    public static String mCurrentFid;
-    public static String mCurrentTid;
+    private static String mCurrentFid;
+    private static String mCurrentTid;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
         mCurrentFid = Util.getLastForumFid();
-
     }
 
     public static String getmCurrentFid() {

@@ -31,6 +31,7 @@ import com.szx.myapplication.model.UserDetail;
 import com.szx.myapplication.util.AsyncHttpUtil;
 import com.szx.myapplication.util.UrlUtil;
 import com.szx.myapplication.util.Util;
+import com.szx.myapplication.view.MyDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -236,6 +237,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_search:
                 str = "搜索";
+                break;
+            case R.id.nav_choose_forum:
+                new MyDialog(this).show();
                 break;
             default:
                 str = "未知";
