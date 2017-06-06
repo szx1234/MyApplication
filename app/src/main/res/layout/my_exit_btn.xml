@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="8dp"
+        android:background="@color/colorAccent"
         android:gravity="center"
+        android:textStyle="bold"
         android:text="退出登录"
         android:textSize="14sp" />
 </LinearLayout>

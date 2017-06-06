@@ -3,16 +3,17 @@
     <PreferenceCategory
         android:key="night_mode"
         android:title="论坛设置">
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="setting_mode"
             android:summary="夜间模式时间00:00-8:00"
             android:title="开启夜间模式" />
-
         <SwitchPreference
             android:title="启动通知栏"
             android:key="setting_notation"/>
         <ListPreference
+            android:key="setting_refresh_time"
             android:title="聊天刷新时间"
             android:summary="建议刷新间隔时间长"
             android:dialogTitle="选择刷新时间"
