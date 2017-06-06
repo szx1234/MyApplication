@@ -27,7 +27,6 @@ import com.szx.myapplication.Listener.OnLoadMoreListener;
 import com.szx.myapplication.R;
 import com.szx.myapplication.adapter.PostAdapter;
 import com.szx.myapplication.model.Post;
-import com.szx.myapplication.model.UserDetail;
 import com.szx.myapplication.util.AsyncHttpUtil;
 import com.szx.myapplication.util.UrlUtil;
 import com.szx.myapplication.util.Util;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout mDrawerLayout;
     private int currentPage = 1;
     private int maxPage = 1;
-    private String fid = "108";
+    private static String fid = "108";
     private boolean isFirstInThisForum = true;
 
     @Override
@@ -87,6 +86,9 @@ public class MainActivity extends AppCompatActivity
         initToolBarAndDrawerLayout();
     }
 
+    public static void setFid(String fid){
+        MainActivity.fid = fid;
+    }
 
 
     private void initToolBarAndDrawerLayout() {
@@ -118,14 +120,9 @@ public class MainActivity extends AppCompatActivity
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                currentPage = 1;
-                list.clear();
-                adapter.notifyDataSetChanged();
-                loadMore();
+                refreshCode();
             }
         });
-        //加载第一次数据
-        loadMore();
 
         //给recycler设置一些东西，比如Linearlayoutmanager和adapter
         recyclerView.setHasFixedSize(true);
@@ -133,6 +130,9 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new PostAdapter(list, recyclerView, this);
         recyclerView.setAdapter(adapter);
+
+        //加载第一次数据
+        refreshCode();
 
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -148,6 +148,15 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    public void refreshCode() {
+        if (!refreshLayout.isRefreshing())
+            refreshLayout.setRefreshing(true);
+        currentPage = 1;
+        list.clear();
+        adapter.notifyDataSetChanged();
+        loadMore();
     }
 
     private void initUserDetail() {
@@ -245,7 +254,6 @@ public class MainActivity extends AppCompatActivity
                 str = "未知";
                 break;
         }
-        Toast.makeText(this, "你点击了 ： " + str, Toast.LENGTH_SHORT).show();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -259,7 +267,7 @@ public class MainActivity extends AppCompatActivity
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
                 Log.w("2222", new String(responseBody).replaceAll("amp;", ""));
 
-                if (list.size() > 0 && list.get(list.size()-1) == null) {
+                if (list.size() > 0 && list.get(list.size() - 1) == null) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
@@ -299,7 +307,7 @@ public class MainActivity extends AppCompatActivity
                 if (refreshLayout.isRefreshing())
                     refreshLayout.setRefreshing(false);
 
-                if (list.size() > 0 && list.get(list.size()-1) == null) {
+                if (list.size() > 0 && list.get(list.size() - 1) == null) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
@@ -312,7 +320,7 @@ public class MainActivity extends AppCompatActivity
                 });
             }
         });
-
-
     }
+
+
 }

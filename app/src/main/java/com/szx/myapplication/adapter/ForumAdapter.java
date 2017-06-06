@@ -1,7 +1,9 @@
 package com.szx.myapplication.adapter;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.szx.myapplication.R;
+import com.szx.myapplication.activity.App;
+import com.szx.myapplication.activity.MainActivity;
 import com.szx.myapplication.model.BaseForum;
 import com.szx.myapplication.model.ForumHeader;
 import com.szx.myapplication.model.ForumNormal;
@@ -29,10 +33,12 @@ public class ForumAdapter extends RecyclerView.Adapter {
 
     private List<BaseForum> mData;
     private MyDialog mMyDialog;
+    private Context mContext;
 
-    public ForumAdapter(MyDialog myDialog, List<BaseForum> data) {
+    public ForumAdapter(Context context, MyDialog myDialog, List<BaseForum> data) {
         this.mMyDialog = myDialog;
         this.mData = data;
+        this.mContext = context;
     }
 
     class HeaderHolder extends RecyclerView.ViewHolder {
@@ -78,16 +84,19 @@ public class ForumAdapter extends RecyclerView.Adapter {
             ((NormalHolder) holder).name.setText(((ForumNormal) forum).getName());
 
             Drawable drawable = Util.getForumIcon(((ForumNormal) forum).getFid());
-            if (drawable != null)
+            if (drawable != null) {
                 ((NormalHolder) holder).icon.setImageDrawable(drawable);
-            else
+            } else {
                 ((NormalHolder) holder).icon.setImageResource(R.drawable.image_place);
-
+            }
             ((NormalHolder) holder).icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mMyDialog.dismiss();
-                    Toast.makeText(mMyDialog.getContext(), "你点击了" + ((ForumNormal) forum).getName(), Toast.LENGTH_SHORT).show();
+                    App.setmCurrentFid(((ForumNormal) forum).getFid());
+                    MainActivity.setFid(((ForumNormal) forum).getFid());
+                    ((MainActivity)mContext).refreshCode();
+
                 }
             });
         }

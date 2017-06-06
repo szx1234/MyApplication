@@ -58,7 +58,7 @@ public class MyDialog extends Dialog {
         mData = new ArrayList<>();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.dialog_recyclerView);
-        mForumAdapter = new ForumAdapter(this, mData);
+        mForumAdapter = new ForumAdapter(mContext, this, mData);
         mGridLayoutManager = new GridLayoutManager(mContext, 4);
 
         //SpanSize是一个view占多少列，所以如果是header就要占4列，而普通的就只占一列就好
