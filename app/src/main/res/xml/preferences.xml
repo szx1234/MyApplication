@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="night_mode"
+        android:title="论坛设置">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="setting_mode"
+            android:summary="夜间模式时间00:00-8:00"
+            android:title="开启夜间模式" />
+
+        <SwitchPreference
+            android:title="启动通知栏"
+            android:key="setting_notation"/>
+        <ListPreference
+            android:title="聊天刷新时间"
+            android:summary="建议刷新间隔时间长"
+            android:dialogTitle="选择刷新时间"
+            android:entries="@array/setting_refresh_time"
+            android:entryValues="@array/setting_refresh_time_value"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="tail"
+        android:title="小尾巴">
+
+        <SwitchPreference
+            android:key="setting_tail_state"
+            android:summary="建议小尾巴不要过长"
+            android:title="启用小尾巴" />
+        <EditTextPreference
+            android:key="setting_tail_content"
+            android:title="自定义小尾巴"
+            android:defaultValue=" ---来自睿思Android客户端"
+            android:summary="自定义你的小尾巴"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="其他">
+
+        <Preference
+            android:title="当前版本"
+            android:summary="1.0"/>
+
+        <Preference
+            android:key="setting_application_location"
+            android:title="项目地址"
+            android:summary="https://github.com/szx1234/MyApplication"/>
+
+        <Preference
+            android:key="setting_exit"
+            android:layout="@layout/my_exit_btn"/>
+    </PreferenceCategory>
+</PreferenceScreen>

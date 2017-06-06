@@ -8,8 +8,9 @@ import com.szx.myapplication.activity.App;
 
 public class UrlUtil {
     public static final String LOGIN_URL = "member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LRaJa&mobile=2";
-    public static final String BASE_URL = "http://rs.xidian.edu.cn/";
+    public static final String BASE_URL = "http://bbs.rs.xidian.me/";
 
+    //http://bbs.rs.xidian.me/member.php?mod=logging&action=login&mobile=2
     //http://rs.xidian.edu.cn/
     public static String getLoginUrl(){
         return BASE_URL+LOGIN_URL;

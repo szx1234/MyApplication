@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="setting_refresh_time">
+        <item>1s</item>
+        <item>2s</item>
+        <item>4s</item>
+        <item>8s</item>
+    </string-array>
+    <string-array name="setting_refresh_time_value">
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+    </string-array>
+</resources>

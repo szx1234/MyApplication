@@ -3,13 +3,11 @@ package com.szx.myapplication.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.szx.myapplication.R;
 import com.szx.myapplication.activity.App;
@@ -53,9 +51,10 @@ public class ForumAdapter extends RecyclerView.Adapter {
     class NormalHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView icon;
-
+        View view;
         public NormalHolder(View itemView) {
             super(itemView);
+            view = itemView;
             name = (TextView) itemView.findViewById(R.id.forum_name);
             icon = (ImageView) itemView.findViewById(R.id.forum_img);
         }
@@ -89,14 +88,18 @@ public class ForumAdapter extends RecyclerView.Adapter {
             } else {
                 ((NormalHolder) holder).icon.setImageResource(R.drawable.image_place);
             }
-            ((NormalHolder) holder).icon.setOnClickListener(new View.OnClickListener() {
+            ((NormalHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mMyDialog.dismiss();
-                    App.setmCurrentFid(((ForumNormal) forum).getFid());
-                    MainActivity.setFid(((ForumNormal) forum).getFid());
-                    ((MainActivity)mContext).refreshCode();
+                    ForumNormal normal = (ForumNormal) forum;
 
+                    MainActivity.setFid(normal.getFid());
+                    ((MainActivity)mContext).refreshCode();
+                    ((MainActivity)mContext).setTitle(normal.getName());
+
+                    App.setmCurrentFid(normal.getFid());
+                    Util.setLastForumName(normal.getName());
                 }
             });
         }

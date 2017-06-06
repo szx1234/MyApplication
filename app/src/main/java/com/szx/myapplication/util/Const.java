@@ -9,4 +9,5 @@ public class Const {
     public static final String KEY_UID = "UID";
     public static final String KEY_USER_NAME = "USER_NAME";
     public static final String KEY_LAST_FORUM_FID = "LAST_FORUM_FID";
+    public static final String KEY_LAST_FORUM_NAME = "LAST_FORUM_NAME";
 }

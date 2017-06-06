@@ -84,7 +84,7 @@ public class MyDialog extends Dialog {
             s = new String(buff);
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(mContext, "读取", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "读取失败", Toast.LENGTH_SHORT).show();
         } finally {
             try {
                 is.close();

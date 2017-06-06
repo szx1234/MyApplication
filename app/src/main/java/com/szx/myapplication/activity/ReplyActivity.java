@@ -1,6 +1,9 @@
 package com.szx.myapplication.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
@@ -17,8 +20,10 @@ import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.szx.myapplication.R;
 import com.szx.myapplication.model.Article;
+import com.szx.myapplication.model.UserDetail;
 import com.szx.myapplication.util.AsyncHttpUtil;
 import com.szx.myapplication.util.UrlUtil;
+import com.szx.myapplication.util.Util;
 import com.szx.myapplication.webview.MyWebView;
 
 import org.jsoup.Jsoup;
@@ -124,6 +129,15 @@ public class ReplyActivity extends AppCompatActivity {
 
     private void initContent() {
         Picasso.with(this).load(mArticle.getImgUrl()).into(mCircleImageView);
+        mCircleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ReplyActivity.this, UserDetailActivity.class);
+                intent.putExtra("uid", Util.analysisUid(mArticle.getImgUrl()));
+                intent.putExtra("name", mArticle.getUserName());
+                startActivity(intent);
+            }
+        });
         mUserName.setText(mArticle.getUserName());
         mReplyTime.setText(mArticle.getReplyTime());
         myWebView.loadDataWithBaseURL(null, mArticle.getContent(), "text/html", "UTF-8", null);

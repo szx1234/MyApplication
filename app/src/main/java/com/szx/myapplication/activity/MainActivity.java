@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -46,6 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private List<Post> list;
+    public Toolbar toolbar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
     private PostAdapter adapter;
@@ -59,15 +61,19 @@ public class MainActivity extends AppCompatActivity
     private static String fid = "108";
     private boolean isFirstInThisForum = true;
 
+    private String title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activty);
-
         /**
          * 刚开始的时候加载当前fid，如果是第一次加载那么就是上一次的fid
          */
         fid = App.getmCurrentFid();
+        title = Util.getLastForumName();
+        setTitle(title);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         /**
@@ -92,9 +98,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void initToolBarAndDrawerLayout() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +150,12 @@ public class MainActivity extends AppCompatActivity
                         list.add(null);
                         adapter.notifyItemInserted(list.size() - 1);
                     }
-                    loadMore();
+                    /**
+                     * 修复了bug，解决了刷新时触发了loadMore而导致两次请求网络
+                     */
+                    if (!refreshLayout.isRefreshing()) {
+                        loadMore();
+                    }
                 }
             }
         });
@@ -154,6 +165,7 @@ public class MainActivity extends AppCompatActivity
         if (!refreshLayout.isRefreshing())
             refreshLayout.setRefreshing(true);
         currentPage = 1;
+        isFirstInThisForum = true;
         list.clear();
         adapter.notifyDataSetChanged();
         loadMore();
@@ -217,7 +229,6 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        Toast.makeText(this, item.getItemId(), Toast.LENGTH_SHORT).show();
         String str = "NULL";
         /**
          * TODO 添加nav各项逻辑
@@ -239,7 +250,8 @@ public class MainActivity extends AppCompatActivity
                 str = "消息";
                 break;
             case R.id.nav_settings:
-                str = "设置";
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_about:
                 str = "关于";
@@ -255,8 +267,13 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }, 50);
+
         return true;
     }
 
@@ -265,8 +282,6 @@ public class MainActivity extends AppCompatActivity
         AsyncHttpUtil.get(MainActivity.this, "forum.php?mod=forumdisplay&fid=" + fid + "&page=" + currentPage++ + "&mobile=2", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
-                Log.w("2222", new String(responseBody).replaceAll("amp;", ""));
-
                 if (list.size() > 0 && list.get(list.size() - 1) == null) {
                     list.remove(list.size() - 1);
                     adapter.notifyDataSetChanged();
@@ -275,9 +290,13 @@ public class MainActivity extends AppCompatActivity
                 Log.w("shit", "onSuccess: " + new String(responseBody));
                 if (isFirstInThisForum) {
                     isFirstInThisForum = false;
-                    maxPage = Integer.valueOf(Util.analysisPageNum(doc.select("span[title]").text()));
+                    if (TextUtils.isEmpty(Util.analysisPageNum(doc.select("span[title]").text()))){
+                        maxPage = 100;
+                    } else {
+                        maxPage = Integer.valueOf(Util.analysisPageNum(doc.select("span[title]").text()));
+                    }
                 }
-                Elements elements = doc.select("li");
+                Elements elements = doc.select("div.threadlist").select("li");
                 for (Element element : elements) {
                     Element a = element.select("a").get(0);
                     String url = a.attr("href").replaceAll("amp;", "");
@@ -286,12 +305,6 @@ public class MainActivity extends AppCompatActivity
                     String author = element.select("a").select("span.by").text();
                     String title = element.select("a").text();
                     title = title.substring(0, title.length() - author.length());
-                    Log.w("element", "  ");
-                    Log.w("element", author);
-                    Log.w("element", title);
-                    Log.w("element", url);
-                    Log.w("element", replyCount);
-                    Log.w("element", hasImg + "");
                     Post post = new Post(url, title, author, replyCount, hasImg);
                     list.add(post);
                 }

@@ -57,6 +57,19 @@ public class Util {
         return fid;
     }
 
+    public static void setLastForumName(String name) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(Const.KEY_LAST_FORUM_NAME, name);
+        editor.commit();
+    }
+
+    public static String getLastForumName () {
+        SharedPreferences sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(context);
+        String name = sharedPreferences.getString(Const.KEY_LAST_FORUM_NAME, "校园交易");
+        return name;
+
+    }
+
     public static String analysisUid(String href) {
         String uid = null;
         Pattern pattern = Pattern.compile("uid=\\d+");
