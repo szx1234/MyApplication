@@ -77,7 +77,7 @@ public class ReplyActivity extends AppCompatActivity {
                 AsyncHttpUtil.post(ReplyActivity.this, replyUrl, mParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        MActivity.open(ReplyActivity.this, new String(responseBody));
+//                        MActivity.open(ReplyActivity.this, new String(responseBody));
                         Toast.makeText(ReplyActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
                         finish();
                     }
@@ -85,7 +85,7 @@ public class ReplyActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         Toast.makeText(ReplyActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
-                        MActivity.open(ReplyActivity.this, new String(error.getMessage()));
+//                        MActivity.open(ReplyActivity.this, new String(error.getMessage()));
                         finish();
                     }
                 });
@@ -123,7 +123,7 @@ public class ReplyActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.mipmap.menu_return);
+        actionBar.setHomeAsUpIndicator(R.mipmap.back);
         actionBar.setTitle("回复:" + mArticle.getUserName());
     }
 

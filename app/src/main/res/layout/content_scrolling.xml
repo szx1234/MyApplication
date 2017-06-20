@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="积分"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="金币"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="上传量"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="下载量"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="发种数"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="筹码"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="保种度"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView
@@ -214,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="人品"
-                    android:textColor="#000"
+                    android:textColor="@color/text_color_content"
                     android:textSize="15sp" />
 
                 <TextView

@@ -55,13 +55,13 @@ public class ArticleActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.mipmap.menu_return);
+        actionBar.setHomeAsUpIndicator(R.mipmap.back);
 
         text_title = (TextView) findViewById(R.id.article_text_title);
         url = getIntent().getStringExtra("url");
 
         tid = App.getmCurrentTid();
-        data = new ArrayList<Article>();
+        data = new ArrayList<>();
         mRecyclerView = (RecyclerView) findViewById(R.id.article_recycler_view);
 
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -90,6 +90,7 @@ public class ArticleActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
 
+                Log.w("jinru", "onSuccess: " + new String(responseBody) );
                 /**
                  * 去掉Footer
                  */
@@ -144,6 +145,9 @@ public class ArticleActivity extends AppCompatActivity {
                 elements = doc.select("div.plc.cl");
                 for (Element element : elements) {
                     Article article = new Article();
+
+                    Log.w("获得数据", "html=" + element.html());
+
                     article.setImgUrl(element.select("span.avatar").select("img").attr("src"));
                     article.setUserDetailUrl(element.select("ul.authi").select("li.grey").select("b").select("a").attr("href"));
                     article.setUserName(element.select("ul.authi").select("li.grey").select("b").text());
@@ -166,6 +170,7 @@ public class ArticleActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.w("jinru", "onFailure: " + new String(responseBody) );
                 ArticleAdapter.loadding = false;
                 if(data.size() > 0 && data.get(data.size()-1) == null){
                     data.remove(data.size() - 1);

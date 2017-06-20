@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@drawable/background">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsiing_toolbar_layout"
@@ -31,7 +32,7 @@
                     android:id="@+id/userdetail_user_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/image_place"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="40dp"
                     />
@@ -51,9 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/fab_add"
+        app:elevation="16dp"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        android:src="@mipmap/fab_add" />
+        app:layout_anchorGravity="bottom|end" />
 
     <include layout="@layout/content_scrolling" />
 

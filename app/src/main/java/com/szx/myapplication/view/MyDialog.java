@@ -117,4 +117,5 @@ public class MyDialog extends Dialog {
             Toast.makeText(mContext, "解析失败", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

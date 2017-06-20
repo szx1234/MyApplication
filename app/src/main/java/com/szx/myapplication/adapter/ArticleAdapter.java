@@ -129,7 +129,7 @@ public class ArticleAdapter extends RecyclerView.Adapter {
             final Article article = data.get(position);
             Log.w("picasso", "onBindViewHolder: " + article.getImgUrl());
 
-            Picasso.with(context).load(article.getImgUrl()).into(commentHolder.img_user);
+            Picasso.with(context).load(article.getImgUrl().replaceAll("small", "middle")).into(commentHolder.img_user);
 
             commentHolder.text_user_name.setText(article.getUserName());
             commentHolder.text_reply_time.setText(article.getReplyTime());

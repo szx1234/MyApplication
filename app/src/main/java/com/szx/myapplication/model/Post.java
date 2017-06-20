@@ -1,10 +1,12 @@
 package com.szx.myapplication.model;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by songzhixin on 2017/5/17.
  */
 
-public class Post {
+public class Post extends DataSupport{
     private String url;
     private String title;
     private String author;

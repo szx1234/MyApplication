@@ -1,15 +1,16 @@
 package com.szx.myapplication.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +30,7 @@ import com.szx.myapplication.R;
 import com.szx.myapplication.adapter.PostAdapter;
 import com.szx.myapplication.model.Post;
 import com.szx.myapplication.util.AsyncHttpUtil;
+import com.szx.myapplication.util.Const;
 import com.szx.myapplication.util.UrlUtil;
 import com.szx.myapplication.util.Util;
 import com.szx.myapplication.view.MyDialog;
@@ -61,12 +63,18 @@ public class MainActivity extends AppCompatActivity
     private static String fid = "108";
     private boolean isFirstInThisForum = true;
 
+    private long mLastPressedTime = 0;
+    private long mCurrentPressedTime = 0;
+
     private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activty);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
+        }
         /**
          * 刚开始的时候加载当前fid，如果是第一次加载那么就是上一次的fid
          */
@@ -101,15 +109,6 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -207,12 +206,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_activty, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -229,28 +222,34 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent intent;
         String str = "NULL";
         /**
          * TODO 添加nav各项逻辑
          */
         switch (id) {
             case R.id.nav_myArticle:
-                str = "文章";
+                intent = new Intent(MainActivity.this, MyCollectionOrMyArticleActivity.class);
+                intent.putExtra("type", "MyArticle");
+                startActivity(intent);
                 break;
             case R.id.nav_myFriend:
                 str = "朋友";
                 break;
             case R.id.nav_myCollection:
-                str = "收藏";
+                intent = new Intent(MainActivity.this, MyCollectionOrMyArticleActivity.class);
+                intent.putExtra("type", "MyCollection");
+                startActivity(intent);
                 break;
             case R.id.nav_scanHistory:
-                str = "历史";
+                intent = new Intent(MainActivity.this, ScanHistoryActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_message:
                 str = "消息";
                 break;
             case R.id.nav_settings:
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_about:
@@ -336,4 +335,18 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            mCurrentPressedTime = System.currentTimeMillis();
+            if(mCurrentPressedTime - mLastPressedTime > 2* Const.SECOND) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                mLastPressedTime = mCurrentPressedTime;
+            } else {
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

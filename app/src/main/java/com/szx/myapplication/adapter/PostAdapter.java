@@ -113,9 +113,9 @@ public class PostAdapter extends RecyclerView.Adapter {
                      * 在点击某一个帖子的时候设置全局变量tid
                      *
                      */
+                    post.save();
                     App.setmCurrentTid(Util.analysisTid(post.getUrl()));
                     context.startActivity(intent);
-
                     Toast.makeText(v.getContext(), "你点击了" + post.getUrl(), Toast.LENGTH_SHORT).show();
                 }
             });

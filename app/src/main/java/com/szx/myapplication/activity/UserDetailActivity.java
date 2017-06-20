@@ -1,9 +1,11 @@
 package com.szx.myapplication.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -64,12 +66,15 @@ public class UserDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.mipmap.menu_return);
+        actionBar.setHomeAsUpIndicator(R.mipmap.back);
 
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsiing_toolbar_layout);
         mCollapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
@@ -125,7 +130,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Picasso.with(UserDetailActivity.this).load(imgUrl).into(mImg);
+                        Picasso.with(UserDetailActivity.this).load(imgUrl.replaceAll("small", "middle")).into(mImg);
                         Log.w("数量", "run: " + imgUrl);
                         mScore.setText(score);
                         mGold.setText(gold);

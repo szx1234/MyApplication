@@ -10,11 +10,13 @@ import com.szx.myapplication.fragment.MyPreferenceFragment;
 import com.szx.myapplication.util.Const;
 import com.szx.myapplication.util.Util;
 
+import org.litepal.LitePalApplication;
+
 /**
  * Created by songzhixin on 2017/5/27.
  */
 
-public class App extends Application {
+public class App extends LitePalApplication {
     static Context mContext;
     /**
      * 设置中的以一些常量
