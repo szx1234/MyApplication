@@ -208,13 +208,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                                 if (elements.size() > 0) {
                                     mMaxPage = Integer.valueOf(Util.analysisPageNum(elements.get(0).select("span").attr("title")));
                                 }
-                                praseData(str);
+                                new ParseDataTask().execute(str);
                             }
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                                 Snackbar.make(view, "网络错误", Snackbar.LENGTH_LONG).show();
-
                             }
                         });
                         break;
@@ -223,10 +222,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-    }
-
-    private void praseData(String str) {
-        new ParseDataTask().execute(str);
     }
 
     public class ParseDataTask extends AsyncTask<String, Void, Void> {
@@ -254,6 +249,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             mAdapter.notifyDataSetChanged();
         }
     }
+
+
 
     private void hide_search_view() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
