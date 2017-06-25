@@ -1,5 +1,7 @@
 package com.szx.myapplication.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,4 +20,11 @@ public class MActivity extends AppCompatActivity{
         setContentView(R.layout.activity_mactivity);
         ((TextView)findViewById(R.id.textView)).setText(getIntent().getStringExtra("content"));
     }
+
+    public static void open(Activity activity, String str) {
+        Intent intent = new Intent(activity, MActivity.class);
+        intent.putExtra("content", str);
+        activity.startActivity(intent);
+    }
+
 }

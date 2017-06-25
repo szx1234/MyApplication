@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.szx.myapplication.activity.App;
 
@@ -88,6 +89,17 @@ public class Util {
             tid = matcher.group().replaceAll("tid=", "");
         }
         return tid;
+    }
+
+    public static String analysisSearchId(String href) {
+        String searchid = null;
+        Pattern pattern = Pattern.compile("searchid=\\d+");
+        Matcher matcher = pattern.matcher(href);
+        if (matcher.find()) {
+            searchid = matcher.group().replaceAll("searchid=", "");
+            Log.w("headers", searchid );
+        }
+        return searchid;
     }
 
     public static String analysisPageNum(String str) {

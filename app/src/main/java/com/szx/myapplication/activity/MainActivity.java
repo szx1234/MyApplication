@@ -256,7 +256,8 @@ public class MainActivity extends AppCompatActivity
                 str = "关于";
                 break;
             case R.id.nav_search:
-                str = "搜索";
+                intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_choose_forum:
                 new MyDialog(this).show();

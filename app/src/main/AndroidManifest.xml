@@ -30,6 +30,7 @@
         <activity android:name=".activity.MyCollectionOrMyArticleActivity"/>
         <activity android:name=".activity.MActivity"/>
         <activity android:name=".activity.ScanHistoryActivity"/>
+        <activity android:name=".activity.SearchActivity"/>
     </application>
 
 </manifest>
